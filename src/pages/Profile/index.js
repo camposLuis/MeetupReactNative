@@ -4,7 +4,14 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import Background from '~/components/Background';
 import Header from '~/components/Header';
 
-import { Container, Form, FormInput, Separator, SubmitButton } from './styles';
+import {
+  Container,
+  Form,
+  FormInput,
+  Separator,
+  SubmitButton,
+  LogoutButton,
+} from './styles';
 
 export default function Profile() {
   const emailRef = useRef();
@@ -79,6 +86,8 @@ export default function Profile() {
           />
 
           <SubmitButton onPress={() => {}}>Salvar perfil</SubmitButton>
+
+          <LogoutButton onPress={() => {}}>Sair do Meetup</LogoutButton>
         </Form>
       </Container>
     </Background>

@@ -15,7 +15,7 @@ import {
   SubmitButton,
 } from './styles';
 
-export default function MeetupList({ create, cancel }) {
+export default function MeetupList({ create }) {
   return (
     <Container>
       <Banner

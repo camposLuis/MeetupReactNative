@@ -7,7 +7,7 @@ import MeetupList from '~/components/MeetupList';
 
 import { Container, List } from './styles';
 
-const data = [1, 2, 3, 4, 5];
+const data = [1, 2];
 
 export default function Subscription() {
   const [refresh, setRefresh] = useState(false);
@@ -23,9 +23,7 @@ export default function Subscription() {
         <List
           data={data}
           keyExtractor={item => String(item)}
-          renderItem={({ item }) => (
-            <MeetupList data={item} create={false} cancel />
-          )}
+          renderItem={({ item }) => <MeetupList data={item} create={false} />}
           refreshing={refresh}
           onRefresh={handleRefresh}
         />

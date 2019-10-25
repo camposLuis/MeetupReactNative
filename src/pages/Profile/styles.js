@@ -28,3 +28,8 @@ export const SubmitButton = styled(Button)`
   margin-top: 5px;
   background: #e5556e;
 `;
+
+export const LogoutButton = styled(Button)`
+  margin-top: 15px;
+  height: 42px;
+`;
