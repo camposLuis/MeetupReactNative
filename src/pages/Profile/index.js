@@ -1,5 +1,6 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { Text } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Background from '~/components/Background';
 import Header from '~/components/Header';
@@ -13,17 +14,46 @@ import {
   LogoutButton,
 } from './styles';
 
+import { signOut } from '~/store/modules/auth/actions';
+import { updateProfileRequest } from '~/store/modules/user/actions';
+
 export default function Profile() {
+  const dispatch = useDispatch();
+
+  const profile = useSelector(state => state.user.profile);
+
   const emailRef = useRef();
   const oldPasswordRef = useRef();
   const passwordRef = useRef();
   const confirmPasswordRef = useRef();
 
-  const [name, setName] = useState('Luís Campos');
-  const [email, setEmail] = useState('luis@gmail.com');
+  const [name, setName] = useState(profile.name);
+  const [email, setEmail] = useState(profile.email);
   const [oldPassword, setOldPassword] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+
+  useEffect(() => {
+    setOldPassword('');
+    setPassword('');
+    setConfirmPassword('');
+  }, [profile]);
+
+  function handleSubmit() {
+    dispatch(
+      updateProfileRequest({
+        name,
+        email,
+        oldPassword,
+        password,
+        confirmPassword,
+      })
+    );
+  }
+
+  function handleSignOut() {
+    dispatch(signOut());
+  }
 
   return (
     <Background>
@@ -85,9 +115,9 @@ export default function Profile() {
             onChangeText={setConfirmPassword}
           />
 
-          <SubmitButton onPress={() => {}}>Salvar perfil</SubmitButton>
+          <SubmitButton onPress={handleSubmit}>Salvar perfil</SubmitButton>
 
-          <LogoutButton onPress={() => {}}>Sair do Meetup</LogoutButton>
+          <LogoutButton onPress={handleSignOut}>Sair do Meetup</LogoutButton>
         </Form>
       </Container>
     </Background>
