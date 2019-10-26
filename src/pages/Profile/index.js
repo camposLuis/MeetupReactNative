@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { Text } from 'react-native';
+import { Text, Alert } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Background from '~/components/Background';
@@ -21,6 +21,7 @@ export default function Profile() {
   const dispatch = useDispatch();
 
   const profile = useSelector(state => state.user.profile);
+  const loading = useSelector(state => state.user.loading);
 
   const emailRef = useRef();
   const oldPasswordRef = useRef();
@@ -52,7 +53,14 @@ export default function Profile() {
   }
 
   function handleSignOut() {
-    dispatch(signOut());
+    Alert.alert('Logout', 'Deseja sair do meetup?', [
+      {
+        text: 'Sim',
+        onPress: () => dispatch(signOut()),
+        style: 'cancel',
+      },
+      { text: 'Não', onPress: () => {} },
+    ]);
   }
 
   return (
@@ -115,7 +123,9 @@ export default function Profile() {
             onChangeText={setConfirmPassword}
           />
 
-          <SubmitButton onPress={handleSubmit}>Salvar perfil</SubmitButton>
+          <SubmitButton loading={loading} onPress={handleSubmit}>
+            Salvar perfil
+          </SubmitButton>
 
           <LogoutButton onPress={handleSignOut}>Sair do Meetup</LogoutButton>
         </Form>
