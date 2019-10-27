@@ -1,4 +1,5 @@
 import React from 'react';
+import { Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import {
@@ -15,34 +16,39 @@ import {
   SubmitButton,
 } from './styles';
 
-export default function MeetupList({ create }) {
+import api from '~/services/api';
+
+export default function MeetupList({ data, create }) {
+  async function handleMeetup(id) {
+    const sub = await api.post(`subscriptions/${id}`);
+  }
+
   return (
     <Container>
       <Banner
         source={{
-          uri:
-            'https://3j6x6z2bx1qq1aawwt3b6y0a-wpengine.netdna-ssl.com/wp-content/uploads/2018/03/Meet_ups.jpg',
+          uri: data.url,
         }}
       />
 
       <Info>
-        <Title>Meetup de React Native</Title>
+        <Title>{data.title}</Title>
         <Date>
           <Icon name="event" size={14} color="#999" />
-          <TDate>24 de outubro de 2019, às 20h</TDate>
+          <TDate>{data.dateMeetup}</TDate>
         </Date>
 
         <Location>
           <Icon name="room" size={14} color="#999" />
-          <TLocation>Rua Major Gote, 808</TLocation>
+          <TLocation>{data.location}</TLocation>
         </Location>
 
         <Organizer>
           <Icon name="person" size={14} color="#999" />
-          <TOrganizer>Organizador: Luís Campos</TOrganizer>
+          <TOrganizer>{`Organizador: ${data.organizer} ${data.id}`}</TOrganizer>
         </Organizer>
 
-        <SubmitButton onPress={() => {}}>
+        <SubmitButton onPress={() => handleMeetup(data.id)}>
           {create ? 'Realizar inscrição' : 'Cancelar inscrição'}
         </SubmitButton>
       </Info>

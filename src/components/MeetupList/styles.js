@@ -5,7 +5,7 @@ import Button from '~/components/Button';
 export const Container = styled.View`
   margin-bottom: 20px;
   border-radius: 4px;
-  background: rgba(255, 255, 255, 0.9);
+  background: #fff;
 
   display: flex;
   flex-direction: column;
