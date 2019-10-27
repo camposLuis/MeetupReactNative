@@ -10,6 +10,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import Background from '~/components/Background';
 import Header from '~/components/Header';
 import MeetupList from '~/components/MeetupList';
+import Empty from '~/components/Empty';
 
 import api from '~/services/api';
 
@@ -22,6 +23,7 @@ import {
   TDate,
   SubmitButton,
   Content,
+  ContentEmpty,
 } from './styles';
 
 function Dashboard({ isFocused }) {
@@ -42,7 +44,7 @@ function Dashboard({ isFocused }) {
   );
 
   const dateFormattedParams = useMemo(
-    () => format(date, "yyyy'-'M'-'d", { locale: pt }),
+    () => format(date, "yyyy'-'M'-'dd", { locale: pt }),
     [date]
   );
 
@@ -118,7 +120,6 @@ function Dashboard({ isFocused }) {
   }
 
   function handleSubmit(subMeetup) {
-    console.tron.log(subMeetup);
     if (subMeetup.organizerId === user.id) {
       Alert.alert(
         'Inscrição',
@@ -162,25 +163,31 @@ function Dashboard({ isFocused }) {
           </TouchableOpacity>
         </SelectDate>
 
-        <List
-          data={meetups}
-          keyExtractor={item => String(item.id)}
-          renderItem={({ item }) => (
-            <Content>
-              <MeetupList data={item} />
-              <SubmitButton
-                loading={loading}
-                onPress={() => handleSubmit(item)}
-              >
-                Realizar inscrição
-              </SubmitButton>
-            </Content>
-          )}
-          refreshing={refresh}
-          onRefresh={handleRefresh}
-          onEndReached={handleOnEndReached}
-          onEndReachedThreshold={0.1}
-        />
+        {meetups.length !== 0 ? (
+          <List
+            data={meetups}
+            keyExtractor={item => String(item.id)}
+            renderItem={({ item }) => (
+              <Content>
+                <MeetupList data={item} />
+                <SubmitButton
+                  loading={loading}
+                  onPress={() => handleSubmit(item)}
+                >
+                  Realizar inscrição
+                </SubmitButton>
+              </Content>
+            )}
+            refreshing={refresh}
+            onRefresh={handleRefresh}
+            onEndReached={handleOnEndReached}
+            onEndReachedThreshold={0.1}
+          />
+        ) : (
+          <ContentEmpty>
+            <Empty typeText />
+          </ContentEmpty>
+        )}
       </Container>
     </Background>
   );

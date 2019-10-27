@@ -1,6 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Image } from 'react-native';
+import PropTypes from 'prop-types';
 
 import { signInRequest } from '~/store/modules/auth/actions';
 
@@ -24,8 +25,8 @@ export default function SignIn({ navigation }) {
 
   const loading = useSelector(state => state.auth.loading);
 
-  const [email, setEmail] = useState('luis@gmail.com');
-  const [password, setPassword] = useState('luiscampos');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
   function handleSubmit() {
     dispatch(signInRequest(email, password));
@@ -70,3 +71,9 @@ export default function SignIn({ navigation }) {
     </Background>
   );
 }
+
+SignIn.propTypes = {
+  navigation: PropTypes.shape({
+    navigate: PropTypes.func,
+  }).isRequired,
+};

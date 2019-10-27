@@ -43,3 +43,13 @@ export const SubmitButton = styled(Button)`
   width: 90%;
   margin-bottom: 20px;
 `;
+
+export const ContentEmpty = styled.View`
+  padding: 20px;
+  border-radius: 4px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+`;

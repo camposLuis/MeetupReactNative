@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import {
@@ -37,9 +38,19 @@ export default function MeetupList({ data }) {
 
         <Organizer>
           <Icon name="person" size={14} color="#999" />
-          <TOrganizer>{`Organizador: ${data.organizer} ${data.id}`}</TOrganizer>
+          <TOrganizer>{`Organizador: ${data.organizer}`}</TOrganizer>
         </Organizer>
       </Info>
     </Container>
   );
 }
+
+MeetupList.propTypes = {
+  data: PropTypes.shape({
+    url: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
+    dateMeetup: PropTypes.string.isRequired,
+    location: PropTypes.string.isRequired,
+    organizer: PropTypes.string.isRequired,
+  }).isRequired,
+};

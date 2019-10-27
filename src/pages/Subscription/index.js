@@ -60,8 +60,6 @@ function Subscription({ isFocused }) {
     setRefreshEmpty(false);
   }
 
-  console.tron.log(subscriptions.length);
-
   useEffect(() => {
     if (isFocused) {
       loadSubscription();

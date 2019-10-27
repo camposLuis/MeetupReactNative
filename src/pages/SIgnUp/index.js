@@ -1,6 +1,7 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Image } from 'react-native';
+import PropTypes from 'prop-types';
 
 import { signUpRequest } from '~/store/modules/auth/actions';
 
@@ -25,12 +26,15 @@ export default function SignUp({ navigation }) {
 
   const loading = useSelector(state => state.auth.loading);
 
-  const [name, setName] = useState('Eliana Silva');
-  const [email, setEmail] = useState('eliana@gmail.com');
-  const [password, setPassword] = useState('123456');
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
   function handleSubmit() {
     dispatch(signUpRequest(name, email, password));
+    setName('');
+    setEmail('');
+    setPassword('');
   }
 
   return (
@@ -83,3 +87,9 @@ export default function SignUp({ navigation }) {
     </Background>
   );
 }
+
+SignUp.propTypes = {
+  navigation: PropTypes.shape({
+    navigate: PropTypes.func,
+  }).isRequired,
+};
