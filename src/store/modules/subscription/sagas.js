@@ -17,11 +17,11 @@ export function* createSubscription({ payload }) {
       `meetups/${payload.id}/subscriptions`
     );
 
-    const checkSubscription = responseSubscriptions.data.map(
+    const checkSubscription = responseSubscriptions.data.subscriptions.find(
       sub => sub.participant_id === profileId && sub.meetup_id === payload.id
     );
 
-    if (checkSubscription[0] === true) {
+    if (checkSubscription) {
       Alert.alert('Aviso', 'Você já possui inscrição neste meetup');
       yield put(createSubscriptionFailure());
     } else {
