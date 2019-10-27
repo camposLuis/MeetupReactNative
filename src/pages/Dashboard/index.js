@@ -117,7 +117,8 @@ function Dashboard({ isFocused }) {
     setPage(1);
   }
 
-  function handleSubimit(subMeetup) {
+  function handleSubmit(subMeetup) {
+    console.tron.log(subMeetup);
     if (subMeetup.organizerId === user.id) {
       Alert.alert(
         'Inscrição',
@@ -166,10 +167,10 @@ function Dashboard({ isFocused }) {
           keyExtractor={item => String(item.id)}
           renderItem={({ item }) => (
             <Content>
-              <MeetupList data={item} create />
+              <MeetupList data={item} />
               <SubmitButton
                 loading={loading}
-                onPress={() => handleSubimit(item)}
+                onPress={() => handleSubmit(item)}
               >
                 Realizar inscrição
               </SubmitButton>

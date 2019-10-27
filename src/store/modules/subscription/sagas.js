@@ -6,6 +6,7 @@ import api from '~/services/api';
 import {
   createSubscriptionSuccess,
   createSubscriptionFailure,
+  cancelSubscriptionSuccess,
 } from './actions';
 
 export function* createSubscription({ payload }) {
@@ -18,21 +19,24 @@ export function* createSubscription({ payload }) {
     );
 
     const checkSubscription = responseSubscriptions.data.subscriptions.find(
-      sub => sub.participant_id === profileId && sub.meetup_id === payload.id
+      sub =>
+        sub.participant_id === profileId &&
+        sub.meetup_id === payload.id &&
+        sub.canceled_at === null
     );
 
     if (checkSubscription) {
       Alert.alert('Aviso', 'Você já possui inscrição neste meetup');
       yield put(createSubscriptionFailure());
     } else {
-      const response = yield call(api.post, `subscriptions/${payload.id}`);
+      yield call(api.post, `subscriptions/${payload.id}`);
 
       Alert.alert(
         'Inscrição realizada',
         'Sua inscrição foi realizada com sucesso'
       );
 
-      yield put(createSubscriptionSuccess(response.data));
+      yield put(createSubscriptionSuccess());
     }
   } catch (err) {
     Alert.alert(
@@ -43,6 +47,23 @@ export function* createSubscription({ payload }) {
   }
 }
 
+export function* cancelSubscription({ payload }) {
+  try {
+    yield call(api.delete, `subscriptions/${payload.id}`);
+
+    Alert.alert('Cancelamento', 'Sua inscrição foi cancelada com sucesso');
+
+    yield put(cancelSubscriptionSuccess());
+  } catch (err) {
+    Alert.alert(
+      'Falha no cancelamento',
+      'Houve uma falha ao realizar o cancelamento.'
+    );
+    yield put(createSubscriptionFailure());
+  }
+}
+
 export default all([
   takeLatest('@subscription/CREATE_SUBSCRIPTION_REQUEST', createSubscription),
+  takeLatest('@subscription/CANCEL_SUBSCRIPTION_REQUEST', cancelSubscription),
 ]);

@@ -14,7 +14,7 @@ import {
   TOrganizer,
 } from './styles';
 
-export default function MeetupList({ data, create }) {
+export default function MeetupList({ data }) {
   return (
     <Container>
       <Banner

@@ -15,6 +15,14 @@ export default function subscription(state = INITIAL_STATE, action) {
         draft.loading = false;
         break;
       }
+      case '@subscription/CANCEL_SUBSCRIPTION_REQUEST': {
+        draft.loading = true;
+        break;
+      }
+      case '@subscription/CANCEL_SUBSCRIPTION_SUCCESS': {
+        draft.loading = false;
+        break;
+      }
       case '@subscription/UPDATE_SUBSCRIPTION_FAILURE': {
         draft.loading = false;
         break;

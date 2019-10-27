@@ -1,32 +1,131 @@
-import React, { useState } from 'react';
-import { Text } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { Text, Alert } from 'react-native';
+import { useSelector, useDispatch } from 'react-redux';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import { format, parseISO } from 'date-fns';
+import pt from 'date-fns/locale/pt';
+import { withNavigationFocus } from 'react-navigation';
+
 import Background from '~/components/Background';
 import Header from '~/components/Header';
 import MeetupList from '~/components/MeetupList';
+import Empty from '~/components/Empty';
 
-import { Container, List } from './styles';
+import { cancelSubscriptionRequest } from '~/store/modules/subscription/actions';
 
-const data = [1, 2];
+import {
+  Container,
+  List,
+  Content,
+  SubmitButton,
+  SubmitButtonEmpty,
+  ContentEmpty,
+} from './styles';
 
-export default function Subscription() {
+import api from '~/services/api';
+
+function Subscription({ isFocused }) {
+  const loading = useSelector(state => state.subscription.loading);
+
+  const dispatch = useDispatch();
+
   const [refresh, setRefresh] = useState(false);
+  const [refreshEmpty, setRefreshEmpty] = useState(false);
+  const [subscriptions, setSubscriptions] = useState([]);
+
+  async function loadSubscription() {
+    const response = await api.get('subscriptions');
+
+    const data = response.data.map(item => {
+      return {
+        idSub: item.id,
+        id: item.meetup.id,
+        title: item.meetup.title,
+        location: item.meetup.location,
+        url: item.meetup.banner.url,
+        organizer: item.meetup.organizer.name,
+        organizerId: item.meetup.organizer.id,
+        dateMeetup: format(
+          parseISO(item.meetup.date),
+          "dd 'de' MMMM 'de' yyyy', às' H'h'",
+          {
+            locale: pt,
+          }
+        ),
+      };
+    });
+
+    setSubscriptions(data);
+    setRefresh(false);
+    setRefreshEmpty(false);
+  }
+
+  console.tron.log(subscriptions.length);
+
+  useEffect(() => {
+    if (isFocused) {
+      loadSubscription();
+    } else {
+      setSubscriptions([]);
+    }
+  }, [isFocused, refresh, loading]);
 
   function handleRefresh() {
     setRefresh(true);
+  }
+
+  function handleSubimitCancel(subMeetup) {
+    Alert.alert(
+      'Cancelamento',
+      `Deseja cancelar sua inscrição no evento ${subMeetup.title}`,
+      [
+        {
+          text: 'Sim',
+          onPress: () => dispatch(cancelSubscriptionRequest(subMeetup.idSub)),
+        },
+        { text: 'Não', onPress: () => {}, style: 'cancel' },
+      ]
+    );
+  }
+
+  function loadRefresh() {
+    setRefreshEmpty(true);
+    loadSubscription();
   }
 
   return (
     <Background>
       <Container>
         <Header />
-        <List
-          data={data}
-          keyExtractor={item => String(item)}
-          renderItem={({ item }) => <MeetupList data={item} create={false} />}
-          refreshing={refresh}
-          onRefresh={handleRefresh}
-        />
+        {subscriptions.length !== 0 ? (
+          <List
+            data={subscriptions}
+            keyExtractor={item => String(item.idSub)}
+            renderItem={({ item }) => (
+              <Content>
+                <MeetupList data={item} />
+                <SubmitButton
+                  loading={loading}
+                  onPress={() => handleSubimitCancel(item)}
+                >
+                  Cancelar inscrição
+                </SubmitButton>
+              </Content>
+            )}
+            refreshing={refresh}
+            onRefresh={handleRefresh}
+          />
+        ) : (
+          <ContentEmpty>
+            <SubmitButtonEmpty
+              loading={refreshEmpty}
+              onPress={() => loadRefresh()}
+            >
+              Atualizar
+            </SubmitButtonEmpty>
+            <Empty typeText={false} />
+          </ContentEmpty>
+        )}
       </Container>
     </Background>
   );
@@ -42,3 +141,5 @@ Subscription.navigationOptions = {
     <Icon name="local-offer" size={20} color={tintColor} />
   ),
 };
+
+export default withNavigationFocus(Subscription);
