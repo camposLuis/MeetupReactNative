@@ -3,9 +3,7 @@ import styled from 'styled-components/native';
 import Button from '~/components/Button';
 
 export const Container = styled.View`
-  margin-bottom: 20px;
-  border-radius: 4px;
-  background: #fff;
+  width: 100%;
 
   display: flex;
   flex-direction: column;
@@ -69,10 +67,4 @@ export const TOrganizer = styled.Text`
   font-size: 13px;
   color: #999;
   margin-left: 5px;
-`;
-
-export const SubmitButton = styled(Button)`
-  margin-top: 15px;
-  height: 40px;
-  width: 100%;
 `;

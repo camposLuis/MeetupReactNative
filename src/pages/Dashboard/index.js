@@ -1,5 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { Text, TouchableOpacity, Alert } from 'react-native';
+import { useSelector, useDispatch } from 'react-redux';
 import { format, subDays, addDays, isBefore, parseISO } from 'date-fns';
 import { withNavigationFocus } from 'react-navigation';
 
@@ -12,9 +13,23 @@ import MeetupList from '~/components/MeetupList';
 
 import api from '~/services/api';
 
-import { Container, List, SelectDate, TDate } from './styles';
+import { createSubscriptionRequest } from '~/store/modules/subscription/actions';
+
+import {
+  Container,
+  List,
+  SelectDate,
+  TDate,
+  SubmitButton,
+  Content,
+} from './styles';
 
 function Dashboard({ isFocused }) {
+  const dispatch = useDispatch();
+
+  const loading = useSelector(state => state.subscription.loading);
+  const user = useSelector(state => state.user.profile);
+
   const [refresh, setRefresh] = useState(false);
   const [date, setDate] = useState(new Date());
   const [page, setPage] = useState(1);
@@ -49,6 +64,7 @@ function Dashboard({ isFocused }) {
         location: item.location,
         url: item.banner.url,
         organizer: item.organizer.name,
+        organizerId: item.organizer.id,
         dateMeetup: format(
           parseISO(item.date),
           "dd 'de' MMMM 'de' yyyy', às' H'h'",
@@ -101,6 +117,27 @@ function Dashboard({ isFocused }) {
     setPage(1);
   }
 
+  function handleSubimit(subMeetup) {
+    if (subMeetup.organizerId === user.id) {
+      Alert.alert(
+        'Inscrição',
+        `Não é possível realizar a incrição, você é o organizador do evento`
+      );
+    } else {
+      Alert.alert(
+        'Inscrição',
+        `Deseja realizar a inscrição para o evento ${subMeetup.title}`,
+        [
+          {
+            text: 'Sim',
+            onPress: () => dispatch(createSubscriptionRequest(subMeetup.id)),
+          },
+          { text: 'Não', onPress: () => {}, style: 'cancel' },
+        ]
+      );
+    }
+  }
+
   return (
     <Background>
       <Container>
@@ -127,7 +164,17 @@ function Dashboard({ isFocused }) {
         <List
           data={meetups}
           keyExtractor={item => String(item.id)}
-          renderItem={({ item }) => <MeetupList data={item} create />}
+          renderItem={({ item }) => (
+            <Content>
+              <MeetupList data={item} create />
+              <SubmitButton
+                loading={loading}
+                onPress={() => handleSubimit(item)}
+              >
+                Realizar inscrição
+              </SubmitButton>
+            </Content>
+          )}
           refreshing={refresh}
           onRefresh={handleRefresh}
           onEndReached={handleOnEndReached}
