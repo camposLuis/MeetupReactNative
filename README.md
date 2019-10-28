@@ -4,7 +4,7 @@
 
 <b>Configurando o projeto para rodar na máquina local</b>
 
-<b>Obs.: Aplicação pronta para rodar tanto em <b>Android</b> quanto em <b>iOS</b>
+<b>Obs.:</b> Aplicação pronta para rodar tanto em <b>Android</b> quanto em <b>iOS</b>
 
 - Para configurar o ambiente de desenvolvimento Android e iOS acesse o link: https://docs.rocketseat.dev/ambiente-react-native/introducao
 
