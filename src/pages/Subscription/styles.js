@@ -29,9 +29,11 @@ export const SubmitButton = styled(Button)`
 `;
 
 export const SubmitButtonEmpty = styled(Button)`
-  height: 40px;
-  width: 100%;
+  height: 50px;
+  width: 40%;
   margin-top: 20px;
+  border-radius: 4px;
+  background: transparent;
 `;
 
 export const ContentEmpty = styled.View`

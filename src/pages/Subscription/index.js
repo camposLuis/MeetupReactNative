@@ -119,7 +119,7 @@ function Subscription({ isFocused }) {
               loading={refreshEmpty}
               onPress={() => loadRefresh()}
             >
-              Atualizar
+              « Atualizar »
             </SubmitButtonEmpty>
             <Empty typeText={false} />
           </ContentEmpty>
