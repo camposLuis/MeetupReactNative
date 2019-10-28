@@ -25,6 +25,4 @@
 
 - No <b>Android</b> execute dentro da raiz do projeto: <b>react-native start</b> e posteriormente <b>react-native run-android</b>
 
-- No <b>Android</b> execute dentro da raiz do projeto: <b>react-native start</b> e posteriormente <b>react-native run-android</b>
-
 - No <b>iOS</b> execute dentro da raiz do projeto: <b>react-native start</b> e posteriormente <b>react-native run-ios</b>
