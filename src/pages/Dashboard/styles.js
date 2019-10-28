@@ -7,7 +7,7 @@ export const Container = styled.View`
 `;
 
 export const List = styled.FlatList.attrs({
-  showsVerticalScrollIndicator: true,
+  showsVerticalScrollIndicator: false,
   contentContainerStyle: { paddingTop: 20, paddingLeft: 30, paddingRight: 30 },
 })``;
 
