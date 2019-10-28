@@ -37,6 +37,7 @@ function Dashboard({ isFocused }) {
   const [page, setPage] = useState(1);
   const [meetups, setMeetups] = useState([]);
   const [pages, setPages] = useState(1);
+  const [itemLoading, setItemLoading] = useState();
 
   const dateFormatted = useMemo(
     () => format(date, "d 'de' MMMM", { locale: pt }),
@@ -137,6 +138,7 @@ function Dashboard({ isFocused }) {
           { text: 'Não', onPress: () => {}, style: 'cancel' },
         ]
       );
+      setItemLoading(subMeetup.id);
     }
   }
 
@@ -171,7 +173,9 @@ function Dashboard({ isFocused }) {
               <Content>
                 <MeetupList data={item} />
                 <SubmitButton
-                  loading={loading}
+                  loading={
+                    itemLoading && itemLoading === item.id ? loading : false
+                  }
                   onPress={() => handleSubmit(item)}
                 >
                   Realizar inscrição

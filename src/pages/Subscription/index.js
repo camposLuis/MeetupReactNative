@@ -32,6 +32,7 @@ function Subscription({ isFocused }) {
   const [refresh, setRefresh] = useState(false);
   const [refreshEmpty, setRefreshEmpty] = useState(false);
   const [subscriptions, setSubscriptions] = useState([]);
+  const [itemLoading, setItemLoading] = useState();
 
   async function loadSubscription() {
     const response = await api.get('subscriptions');
@@ -84,6 +85,7 @@ function Subscription({ isFocused }) {
         { text: 'Não', onPress: () => {}, style: 'cancel' },
       ]
     );
+    setItemLoading(subMeetup.idSub);
   }
 
   function loadRefresh() {
@@ -103,7 +105,9 @@ function Subscription({ isFocused }) {
               <Content>
                 <MeetupList data={item} />
                 <SubmitButton
-                  loading={loading}
+                  loading={
+                    itemLoading && itemLoading === item.idSub ? loading : false
+                  }
                   onPress={() => handleSubimitCancel(item)}
                 >
                   Cancelar inscrição

@@ -41,7 +41,7 @@ export function* createSubscription({ payload }) {
   } catch (err) {
     Alert.alert(
       'Falha na inscrição',
-      'Houve uma falha ao realizar sua inscrição, verifique se já não realizou a inscrição nesta meetup'
+      'Verifique se já não possui uma inscrição para a mesma data e horário'
     );
     yield put(createSubscriptionFailure());
   }
